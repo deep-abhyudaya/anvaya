@@ -1,0 +1,101 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anvaya"
+version = "0.1.0"
+description = "ANVAYA — Autonomous Cyber SOC Platform"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.27.0",
+    "sqlmodel>=0.0.16",
+    "alembic>=1.13.0",
+    "psycopg2-binary>=2.9.9",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.1.0",
+    "scikit-learn>=1.4.0",
+    "networkx>=3.2",
+    "numpy>=1.26.0",
+    "pandas>=2.2.0",
+    "joblib>=1.3.2",
+    "typer>=0.12.0",
+    "rich>=13.7.0",
+    "prompt_toolkit>=3.0.43,<4.0.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.1",
+    "structlog>=24.1.0",
+    "openai>=1.12.0",
+    "anthropic>=0.42.0",
+    "python-multipart>=0.0.20",
+    "pyarrow>=15.0.0",
+    "google-auth>=2.22.0",
+    "google-api-python-client>=2.100.0",
+    "mcp>=2.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.27.0",
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+]
+
+[project.scripts]
+anvaya = "anvaya.cli:main"
+
+[tool.setuptools]
+packages = [
+    "anvaya",
+    "anvaya.agent",
+    "anvaya.cli",
+    "anvaya.data",
+    "anvaya.demo",
+    "anvaya.live",
+    "anvaya.models",
+    "anvaya.routers",
+    "anvaya.sentinel",
+    "anvaya.blastscope",
+    "anvaya.whatif",
+    "anvaya.llm",
+    "anvaya.ml",
+    "anvaya.ml.alertness",
+    "anvaya.simulator",
+]
+
+[tool.setuptools.package-dir]
+"anvaya" = "backend/anvaya"
+"anvaya.agent" = "backend/anvaya/agent"
+"anvaya.cli" = "backend/anvaya/cli"
+"anvaya.data" = "backend/anvaya/data"
+"anvaya.demo" = "backend/anvaya/demo"
+"anvaya.live" = "backend/anvaya/live"
+"anvaya.models" = "backend/anvaya/models"
+"anvaya.routers" = "backend/anvaya/routers"
+"anvaya.sentinel" = "backend/anvaya/sentinel"
+"anvaya.blastscope" = "backend/anvaya/blastscope"
+"anvaya.whatif" = "backend/anvaya/whatif"
+"anvaya.llm" = "backend/anvaya/llm"
+"anvaya.ml" = "ml/anvaya"
+"anvaya.ml.alertness" = "ml/anvaya/alertness"
+"anvaya.simulator" = "simulator/anvaya"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.mypy]
+python_version = "3.14"
+ignore_missing_imports = true
+disable_error_code = ["attr-defined"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

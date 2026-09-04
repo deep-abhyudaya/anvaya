@@ -1,0 +1,4 @@
+[deploy]
+startCommand = anvaya serve
+healthcheckPath = /health
+healthcheckTimeout = 30

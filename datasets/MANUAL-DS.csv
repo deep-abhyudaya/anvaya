@@ -1,0 +1,4 @@
+src_ip,dst_ip,severity,host,user,event_type,attack_family,label
+1.1.1.1,2.2.2.2,high,A,u1,net,lateral,attack
+2.2.2.2,1.1.1.1,high,B,u2,net,lateral,attack
+3.3.3.3,1.1.1.1,medium,A,u1,auth,,

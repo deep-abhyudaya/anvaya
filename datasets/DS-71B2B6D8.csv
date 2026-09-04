@@ -1,0 +1,5 @@
+timestamp,src_ip,dst_ip,port,severity,event_type,attack_family,host,user
+2024-01-01T10:00:00Z,10.0.0.1,10.0.0.2,443,high,network,lateral,A,B
+2024-01-01T10:00:01Z,10.0.0.2,10.0.0.1,443,high,network,lateral,B,A
+2024-01-01T10:00:02Z,10.0.0.3,10.0.0.4,443,medium,network,exfil,C,D
+2024-01-01T10:00:03Z,10.0.0.1,10.0.0.2,443,high,network,lateral,A,B

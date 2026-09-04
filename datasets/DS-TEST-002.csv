@@ -1,0 +1,4 @@
+timestamp,source_ip,destination_ip,host,user,process,command,action,event_type,severity,attack_family,label
+2026-01-01T08:00:00,10.0.0.5,10.0.0.10,HOST-01,eve,ps.exe,cmd-1,network,lateral_movement,critical,lateral_movement,attack
+2026-01-01T08:01:00,10.0.0.5,10.0.0.10,HOST-01,eve,ps.exe,cmd-2,network,lateral_movement,critical,lateral_movement,attack
+2026-01-01T08:02:00,10.0.0.5,10.0.0.10,HOST-01,eve,ps.exe,cmd-3,network,lateral_movement,high,lateral_movement,attack

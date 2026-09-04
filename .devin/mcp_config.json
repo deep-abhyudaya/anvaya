@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "startuped-ai": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.startuped.ai/sse", "--header", "Authorization:${AUTH_HEADER}"]
+    }
+  }
+}
