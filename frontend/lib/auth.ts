@@ -1,6 +1,5 @@
 import { betterAuth } from "better-auth";
 import { organization } from "better-auth/plugins";
-import Database from "better-sqlite3";
 import { Pool } from "pg";
 import * as path from "path";
 
@@ -20,6 +19,8 @@ function createDatabaseAdapter() {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- lazy-load native module so Postgres deployments never touch it
+  const Database = require("better-sqlite3");
   const dbPath = url?.replace(/^sqlite:\/\//, "") || path.resolve(process.cwd(), "..", "anvaya_auth.db");
   return new Database(dbPath);
 }
