@@ -2,6 +2,7 @@
 
 ## Purpose
 
+
 Provide a realtime, observable execution trace similar in UX to modern agentic products without exposing hidden chain-of-thought.
 
 ## Event envelope
