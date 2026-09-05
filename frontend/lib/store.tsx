@@ -70,9 +70,7 @@ export function AnvayaProvider({ children }: { children: React.ReactNode }) {
     let alive = true;
     const probe = async () => {
       try {
-        const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-        const rootBase = apiBase.replace(/\/api\/v1\/?$/, "");
-        const res = await fetch(`${rootBase}/health`, { signal: AbortSignal.timeout(2500) });
+        const res = await fetch("/api/backend/health", { signal: AbortSignal.timeout(2500) });
         if (alive) dispatch({ type: "set-connected", value: res.ok });
       } catch {
         if (alive) dispatch({ type: "set-connected", value: false });

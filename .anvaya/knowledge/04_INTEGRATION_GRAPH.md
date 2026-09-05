@@ -13,6 +13,7 @@ graph LR
     subgraph Frontend
         FE[Next.js app]
         API_CLIENT[lib/api.ts]
+        BFF[Next.js /api/backend proxy]
         STORE[lib/store.tsx]
         AGENT[AgentProvider]
     end
@@ -46,8 +47,9 @@ graph LR
     end
 
     U -->|click/type| FE
-    FE -->|React Query / SSE| API_CLIENT
-    API_CLIENT -->|HTTP/SSE| ROUTERS
+    FE -->|React Query / SSE, same-origin cookie| API_CLIENT
+    API_CLIENT -->|same-origin HTTP/SSE| BFF
+    BFF -->|forwards cookie over HTTPS| ROUTERS
     ROUTERS -->|DB session| DB
     ROUTERS -->|invoke| AGENT_ORC
     AGENT_ORC -->|plan + run| AGENT[AgentLoop]
@@ -84,8 +86,9 @@ graph LR
 
 | From | To | Data / Event | Mechanism | Result | Security / Error |
 |------|-----|--------------|-----------|--------|------------------|
-| `lib/api.ts` | FastAPI routers | JSON request | `fetch` with `credentials: include` | JSON response | CORS allow-list, 500 handler |
-| `connectExecutionSSE` | `/agent/executions/{id}/stream` | `after` query param | `EventSource` | SSE `data:` lines | reconnect on error, fallback to polling |
+| `lib/api.ts` | Next.js `/api/backend/[...path]` | JSON request + same-origin auth cookie | `fetch` with `credentials: include` | proxied JSON response | browser never sends the Vercel cookie cross-domain |
+| Next.js backend proxy | FastAPI routers | method, query, body, headers, auth cookie | server-side HTTPS using `BACKEND_API_URL` | streamed upstream response | configured target only; strips host/content-length/CORS headers |
+| `connectExecutionSSE` | proxied `/agent/executions/{id}/stream` | `after` query param + auth cookie | same-origin `EventSource` | SSE `data:` lines | reconnect on error, fallback to polling |
 | `useAgentEvents` | `/agent/executions/{id}/events` | `after` query | React Query poll 3–5s | `{items, count}` | disabled when no `executionId` |
 | `useMetrics`/`useIncidents` | `/metrics`, `/incidents` | — | React Query 3s | dashboard data | keep previous data |
 

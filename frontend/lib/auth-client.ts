@@ -5,8 +5,9 @@ import { organizationClient } from "better-auth/client/plugins";
 
 export const authClient = createAuthClient({
   baseURL:
-    process.env.NEXT_PUBLIC_AUTH_URL ||
-    (typeof window !== "undefined" ? window.location.origin : "http://localhost:3000"),
+    typeof window !== "undefined"
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3000",
   basePath: "/api/auth",
   fetchOptions: {
     credentials: "include",

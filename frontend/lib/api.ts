@@ -2,9 +2,9 @@
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const API_BASE = "/api/backend/api/v1";
 
-const ROOT_BASE = API_BASE.replace(/\/api\/v1\/?$/, "");
+const ROOT_BASE = "/api/backend";
 
 class APIError extends Error {
   constructor(

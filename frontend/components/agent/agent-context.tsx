@@ -1056,7 +1056,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
 
     const connect = () => {
       source = new EventSource(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"}/agent/executions/${state.executionId}/stream?after=${after}`,
+        `/api/backend/api/v1/agent/executions/${state.executionId}/stream?after=${after}`,
         { withCredentials: true }
       );
 

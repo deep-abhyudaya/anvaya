@@ -44,6 +44,10 @@
 **A:** `EventStore.emit` persists `ExecutionEvent` → SSE `/agent/executions/{id}/stream` or poll `/events` → `lib/api.ts` `connectExecutionSSE` / `useAgentEvents` → `AgentProvider` reducer → `AgentConsole`/`BuildPanel`.
 **Source:** `frontend/lib/api.ts`, `frontend/components/agent/agent-context.tsx`
 
+### Q9a. Why must deployed frontend API calls pass through `/api/backend` instead of calling Render directly?
+**A:** Better Auth's HttpOnly session cookie is scoped to the Vercel host and browsers cannot attach it to an `onrender.com` request. The same-origin Next.js proxy receives the cookie and forwards it server-side to FastAPI.
+**Source:** `frontend/app/api/backend/[...path]/route.ts`, `frontend/lib/api.ts`
+
 ## Level D — Prediction
 
 ### Q10. What happens if `TAVILY_API_KEY` is not set?

@@ -1,5 +1,38 @@
 # ANVAYA — Knowledge Changelog
 
+## 2026-09-05 — Same-origin authenticated Vercel-to-Render proxy
+
+**WHAT CHANGED**
+- Added `/api/backend/[...path]` and routed frontend HTTP, health, and agent SSE traffic through it.
+- Auth client now prefers the current browser origin; Better Auth issues secure cross-site-compatible cookies.
+
+**WHY**
+- A Vercel-scoped cookie cannot be attached by the browser to an `onrender.com` request, causing authenticated backend routes to return 401 after successful login.
+
+**BEFORE**
+- Browser called Render directly with `credentials: include`; CORS could succeed but cookie domain scoping still withheld the session.
+
+**AFTER**
+- Browser calls Vercel same-origin; the server-side proxy forwards the HttpOnly cookie to Render and streams the response.
+
+**DEPENDENCIES**
+- Vercel `BACKEND_API_URL=https://anvaya-izir.onrender.com`, Better Auth database/secret settings, Render HTTPS.
+
+**AFFECTED FLOWS**
+- All frontend REST, health polling, authenticated organization/project requests, agent streaming, and event polling.
+
+**SECURITY IMPACT**
+- Cookie remains HttpOnly and is forwarded only to the environment-configured backend target. No secret is exposed to client JavaScript.
+
+**FAILURE IMPACT**
+- Missing backend target returns 503; upstream and platform streaming limits remain visible to callers.
+
+**MIGRATION/COMPATIBILITY IMPACT**
+- Vercel must define `BACKEND_API_URL`; existing `NEXT_PUBLIC_API_URL` remains a compatibility fallback.
+
+**DOCUMENTATION UPDATED**
+- `.env.example`, `04_INTEGRATION_GRAPH.md`, `13_API_AND_EXTERNAL_INTEGRATIONS.md`, `24_ACTIVE_RECALL.md`, and this changelog.
+
 ## 2026-09-04 — Automatic Startuped behavioral signal instrumentation
 
 ### Architecture impact review

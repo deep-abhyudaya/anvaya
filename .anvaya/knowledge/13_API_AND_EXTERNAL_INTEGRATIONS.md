@@ -17,6 +17,28 @@
 | **Startuped JS SDK** | Authenticated developer API calls | `@startuped-ai/sdk@1.0.4`; key sourced from local MCP config for verification only | Node SDK with wrapped `fetch` | explicit server-side developer calls | live and verified with `X-Startuped-Client: sdk-js` |
 | **Startuped behavioral signals** | Automatic user/agent/CLI behavior tracking | `STARTUPED_API_KEY`, `STARTUPED_SIGNALS_ENABLED` | backend queue + frontend BFF | route views, UI interactions, form submits, auth, agent events, API mutations, CLI commands | live, non-blocking, privacy-safe |
 
+## Vercel-to-Render authenticated API proxy
+
+```text
+CALLER: Browser `lib/api.ts`, `lib/store.tsx`, and AgentProvider
+ENTRYPOINT: Next.js `/api/backend/[...path]`
+REQUEST: Same-origin HTTP/SSE request carrying the Better Auth cookie
+VALIDATION: Catch-all path segments are URL-encoded; target comes only from server environment
+AUTH: Vercel session cookie is forwarded server-side to FastAPI
+TRANSPORT: Browser → Vercel same-origin HTTPS → Render HTTPS
+TARGET: `BACKEND_API_URL` (fallback: `NEXT_PUBLIC_API_URL`)
+TRANSFORMATION: Strip configured `/api/v1`, append requested path/query, remove hop-by-hop and duplicate CORS headers
+RESPONSE: Stream upstream status, headers, and body to the browser
+ERROR HANDLING: Missing target returns 503; upstream failures surface as route errors
+RETRY: React Query/SSE reconnect policy remains the caller's responsibility
+TIMEOUT: No proxy timeout is imposed so SSE can stream; platform duration limits still apply
+LOGGING: Vercel function and Render request logs
+SECURITY BOUNDARY: The HttpOnly cookie remains browser-inaccessible; only the same-origin BFF forwards it to the configured backend
+DOWNSTREAM CONSUMERS: FastAPI auth dependencies, organization/project routes, agent HTTP and SSE routes
+```
+
+Direct browser calls from `vercel.app` to `onrender.com` cannot authenticate with a Vercel-scoped cookie even when `SameSite=None`; cookie domain scoping prevents the browser from attaching it. All backend calls therefore use the same-origin proxy.
+
 ## Adapter pattern
 
 `backend/anvaya/agent/adapters.py`:
